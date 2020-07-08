@@ -34,7 +34,7 @@ function collect(label) {
    document.getElementById("button2").style.color = "green";
    return recognizer.stopListening();
  }
- 
+
  if ( label == 0 ) {
    document.getElementById("button0").style.color = "red";
  } else if ( label == 1 ) {
@@ -127,29 +127,36 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
   }
 
   var mainPeakIndex = 0;
-  var peak = -200;
-
+  var peak          = -200;
+  var impulse       = false; // Looking for sudden change in volume
+  var lastPeak      = 0;
   const startOffset = 20;
   const endOffset   = 20;
-
 
   for( var index = 0; index < 43; index++) {
     var start = index*FFT_RESULT_LEN+startOffset;
     var end   = FFT_RESULT_LEN*(index+1) -(1 + endOffset);
     dataSubArray = data.subarray( start, end );
-    localPeak = dataSubArray.reduce( peakCheck, -200);
+    var currentPeak = dataSubArray.reduce( peakCheck, -200);
     // console.log( start, end );
     // console.log(index, localPeak, peak, mainPeakIndex );
-
-    if ( localPeak >= peak ) {
-      peak          = localPeak;
+    const minChange = 20; // Minimum 5dB change
+    var peakChange = currentPeak - peak; // Minimum 5dB change
+    if ( peakChange > 0 ) {
+      console.log( peakChange );
+      peak          = currentPeak;
       mainPeakIndex = index;
+      if ( (currentPeak - lastPeak) > minChange ) {
+        impulse = true;
+      }
     }
+
+    lastPeak = currentPeak;
   }
   // Display peak
   document.getElementById('currentVolume').textContent = peak.toFixed(1);
 
-  if ( peak > threshold && peak < 0) {
+  if ( peak > threshold && peak < 0 && impulse == true) {
     //console.log(peak, mainPeakIndex);
     return { "threshold": true, "index": mainPeakIndex };
   }
