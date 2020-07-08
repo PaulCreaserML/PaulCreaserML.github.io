@@ -9,6 +9,18 @@
       text-align: center;
       padding: 10px;
     }
+    .capture_window {
+      background-color: lightblue;
+      text-align: center;
+      padding: 5px;
+    }
+    .capture_settings {
+      background-color: lightblue;
+      text-align: center;
+      padding-bottom: 100%;
+      margin-bottom: -100%;
+      padding: 5px;
+    }
     .train {
       border: 1px outset black;
       background-color: lightblue;
@@ -26,18 +38,26 @@
 <body>
   <title>Simple Training Demo</title>
   <p align="center">Audio Training Demo</p>
-  <div class="capture">
-  <h2>Audio Capture</h2>
-  <canvas id="myCanvas" width="696" height="200"></canvas>
-  <button id="captureCount">Count</button>
-  <button id="captureCountValue">0</button>
-  <br/><br/>
-  <button id="button0" onclick="collect(0)">Left</button>
-  <button id="button1" onclick="collect(1)">Right</button>
-  <button id="button2" onclick="collect(2)">Background Noise</button>
-  <button id="captureReset" onclick="captureReset()">Capture Reset</button>
-  Left, Right Threshold (dB): <input id="thresholdDb" type="number" min="-60" max="-20" value="-40" onchange="thresholdChange()">
-  Current peak: <button id="currentVolume">-</button> dB
+
+  <div class="capture" style="width: 100%; overflow: hidden;">
+    <div class="capture_window" style="width: 696px; float: left;">
+      <h2>Audio Capture</h2>
+      <canvas id="myCanvas" width="696" height="200"></canvas>
+      <br/><br/>
+      <button id="button0" onclick="collect(0)">Left</button>
+      <button id="button1" onclick="collect(1)">Right</button>
+      <button id="button2" onclick="collect(2)">Background Noise</button>
+      <button id="captureReset" onclick="captureReset()">Capture Reset</button>
+    </div>
+    <div class="capture_settings" style="margin-left: 620px;" >
+      <h2>Settings</h2>
+      Threshold: <input id="thresholdDb" type="number" min="-60" max="-20" value="-40" onchange="thresholdChange()"> dB
+      <h2>Status</h2>
+      Current peak: <button id="currentVolume">-</button> dB
+      <br/><br/>
+      <button id="captureCount">Count</button>
+      <button id="captureCountValue">0</button>
+    </div>
   </div>
   <div class="train">
   <h2>Model Training</h2>
