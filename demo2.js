@@ -140,10 +140,9 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
     var currentPeak = dataSubArray.reduce( peakCheck, -200);
     // console.log( start, end );
     // console.log(index, localPeak, peak, mainPeakIndex );
-    const minChange = 20; // Minimum 5dB change
+    const minChange = 10; // Minimum 5dB change
     var peakChange = currentPeak - peak; // Minimum 5dB change
     if ( peakChange > 0 ) {
-      console.log( peakChange );
       peak          = currentPeak;
       mainPeakIndex = index;
       if ( (currentPeak - lastPeak) > minChange ) {
