@@ -23,7 +23,7 @@ async function app() {
 const NUM_FRAMES      =   3;
 const FFT_RESULT_LEN  = 232;
 let examples          =  [];
-let epochLimit        =  10;
+let epochLimit        =  20;
 var dbThreshold       = -40;
 var thresholdPer      =  80; // %
 
