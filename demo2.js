@@ -34,10 +34,7 @@ function collect(label) {
    document.getElementById("button2").style.color = "green";
    return recognizer.stopListening();
  }
- if ( label == null ) {
-   return;
- }
-
+ 
  if ( label == 0 ) {
    document.getElementById("button0").style.color = "red";
  } else if ( label == 1 ) {
