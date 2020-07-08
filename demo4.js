@@ -119,6 +119,20 @@ function peakDbThresholdCheck(data, threshold) {
   else { return false; }
 }
 
+async function saveModel() {
+  await model.save('localstorage://my-model');
+}
+
+async function loadModel() {
+  model = await tf.loadLayersModel('localstorage://my-model');
+  const optimizer = tf.train.adam(0.01);
+  model.compile({
+    optimizer,
+    loss: 'categoricalCrossentropy',
+    metrics: ['accuracy']
+  });
+}
+
 function peakDbThresholdAndPositionCheck(data, threshold) {
   function peakCheck(peak, num) {
     if ( num > peak ) {
