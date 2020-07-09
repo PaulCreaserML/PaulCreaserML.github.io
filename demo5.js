@@ -130,18 +130,18 @@ function peakDbThresholdCheck(data, threshold) {
 
 async function saveModel() {
   if  ( selectModelNum == 0 ) {
-    await model.save('localstorage://my-model');
+    await model.save('localstorage://model_demo5_');
   } else {
-    await model.save('localstorage://my-model' + selectModelNum);
+    await model.save('localstorage://model_demo5_' + selectModelNum);
   }
 }
 
 async function loadModel() {
   try {
     if  ( selectModelNum == 0 ) {
-      model = await tf.loadLayersModel('localstorage://my-model');
+      model = await tf.loadLayersModel('localstorage://model_demo5_');
     } else {
-      model = await tf.loadLayersModel('localstorage://my-model' + selectModelNum);
+      model = await tf.loadLayersModel('localstorage://model_demo5_' + selectModelNum);
     }
   } catch(e) {
      document.querySelector('#console').textContent =
