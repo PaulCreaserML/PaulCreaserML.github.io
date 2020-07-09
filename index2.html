@@ -38,7 +38,6 @@
 <body>
   <title>Simple Training Demo</title>
   <p align="center">Audio Training Demo</p>
-
   <div class="capture" style="width: 100%; overflow: hidden;">
     <div class="capture_window" style="width: 696px; float: left;">
       <h2>Audio Capture</h2>
@@ -70,6 +69,7 @@
     </div>
     <div class="model" style="margin-left: 200px;">
       <h2>Model Options</h2>
+      Model Num: <input id="modelNum" type="number" min="0" max="4" value="0" onchange="modelNumChange()">
       <button id="saveModel" onclick="saveModel()">Save Model</button>
       <button id="loadModel" onclick="loadModel()">Load Model</button>
     </div>
@@ -85,7 +85,8 @@
   <button id="dispButton2">Background Noise</button>
   <button id="dispButton1">Right</button>
   <br/><br/>
-  Threshold %: <input id="thresholdPer" type="number" min="70" max="99" value="-80" onchange="thresholdPerChange()">
+  Threshold: <input id="thresholdPer" type="number" min="70" max="99" value="-80" onchange="thresholdPerChange()">%
+  Model: <button id="modelNumButton">None</button>
   </div>
   <div id="console"></div>
   <script src="demo4.js"></script>

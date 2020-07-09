@@ -1,4 +1,19 @@
+// Bad Globals
 let recognizer;
+// One frame is ~23ms of audio.
+const NUM_FRAMES        =     3;
+const FFT_RESULT_LEN    =   232;
+let examples            =    [];
+let epochLimit          =    20;
+var dbThreshold         =   -40;
+var thresholdPer        =    80; // %
+var mainPeakIndex       =     0;
+var peak                =  -200;
+var impulse             = false; // Looking for sudden change in volume
+var lastPeak            =     0;
+const startOffset       =    20;
+const endOffset         =    20;
+var   selectModelNum    =     0;
 
 function predictWord() {
  // Array of words that the recognizer is trained to recognize.
@@ -18,14 +33,6 @@ async function app() {
  buildModel();
  draw( null );
 }
-
-// One frame is ~23ms of audio.
-const NUM_FRAMES      =   3;
-const FFT_RESULT_LEN  = 232;
-let examples          =  [];
-let epochLimit        =  20;
-var dbThreshold       = -40;
-var thresholdPer      =  80; // %
 
 function collect(label) {
  if (recognizer.isListening()) {
@@ -120,11 +127,29 @@ function peakDbThresholdCheck(data, threshold) {
 }
 
 async function saveModel() {
-  await model.save('localstorage://my-model');
+  if  ( selectModelNum == 0 ) {
+    await model.save('localstorage://my-model');
+  } else {
+    await model.save('localstorage://my-model' + selectModelNum);
+  }
 }
 
 async function loadModel() {
-  model = await tf.loadLayersModel('localstorage://my-model');
+  try {
+    if  ( selectModelNum == 0 ) {
+      model = await tf.loadLayersModel('localstorage://my-model');
+    } else {
+      model = await tf.loadLayersModel('localstorage://my-model' + selectModelNum);
+    }
+  } catch(e) {
+     document.querySelector('#console').textContent =
+         `Model load failed`;
+     return;
+  }
+
+  document.querySelector('#console').textContent =
+      `Model loaded`;
+  document.getElementById('modelNumButton').textContent = selectModelNum;
   const optimizer = tf.train.adam(0.01);
   model.compile({
     optimizer,
@@ -141,12 +166,7 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
     return peak;
   }
 
-  var mainPeakIndex = 0;
-  var peak          = -200;
-  var impulse       = false; // Looking for sudden change in volume
-  var lastPeak      = 0;
-  const startOffset = 20;
-  const endOffset   = 20;
+
 
   for( var index = 0; index < 43; index++) {
     var start = index*FFT_RESULT_LEN+startOffset;
@@ -266,6 +286,10 @@ function thresholdChange() {
 
 function epochChange() {
    epochLimit = document.getElementById('epochLimit').value;
+}
+
+function modelNumChange() {
+  selectModelNum    = document.getElementById('modelNum').value;
 }
 
 function buildModel() {
