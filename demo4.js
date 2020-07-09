@@ -5,12 +5,11 @@ const NUM_FRAMES        =     3;
 const FFT_RESULT_LEN    =   232;
 let examples            =    [];
 let epochLimit          =    20;
-var dbThreshold         =   -40;
+var dbThreshold         =   -45;
 var thresholdPer        =    80; // %
 var mainPeakIndex       =     0;
 var peak                =  -200;
 var impulse             = false; // Looking for sudden change in volume
-var lastPeak            =     0;
 const startOffset       =    20;
 const endOffset         =    20;
 var   selectModelNum    =     0;
@@ -159,14 +158,17 @@ async function loadModel() {
 }
 
 function peakDbThresholdAndPositionCheck(data, threshold) {
-  function peakCheck(peak, num) {
-    if ( num > peak ) {
-      peak = num;
+  var lastPeak            =     0;
+  var debugPeak           =  -200;
+  var peak                =  -200;
+
+  function peakCheck(oldPeak, num) {
+    var newPeak = oldPeak;
+    if ( num > oldPeak ) {
+      newPeak = num;
     }
-    return peak;
+    return newPeak;
   }
-
-
 
   for( var index = 0; index < 43; index++) {
     var start = index*FFT_RESULT_LEN+startOffset;
@@ -177,16 +179,23 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
     // console.log(index, localPeak, peak, mainPeakIndex );
     const minChange = 10; // Minimum 5dB change
     var peakChange = currentPeak - peak; // Minimum 5dB change
-    if ( peakChange > 0 ) {
-      peak          = currentPeak;
-      mainPeakIndex = index;
-      if ( (currentPeak - lastPeak) > minChange ) {
-        impulse = true;
+
+    if ( index > 0 ) {
+      if ( peakChange > 0 ) {
+        peak          = currentPeak;
+        mainPeakIndex = index;
+        if ( (currentPeak - lastPeak) > minChange ) {
+          impulse = true;
+        }
       }
     }
-
+    if ( currentPeak > debugPeak ) {
+      debugPeak = currentPeak;
+    }
     lastPeak = currentPeak;
   }
+
+  console.log( debugPeak );
   // Display peak
   document.getElementById('currentVolume').textContent = peak.toFixed(1);
 
