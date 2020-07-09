@@ -6,12 +6,12 @@ const FFT_RESULT_LEN    =   232;
 let examples            =    [];
 let epochLimit          =    20;
 var dbThreshold         =   -45;
+var changeDbThreshold   =    30;
 var thresholdPer        =    80; // %
-var mainPeakIndex       =     0;
 var peak                =  -200;
 var impulse             = false; // Looking for sudden change in volume
-const startOffset       =    20;
-const endOffset         =    20;
+const startOffset       =    40;
+const endOffset         =    40;
 var   selectModelNum    =     0;
 
 function predictWord() {
@@ -161,6 +161,7 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
   var lastPeak            =     0;
   var debugPeak           =  -200;
   var peak                =  -200;
+  var mainPeakIndex       =     0;
 
   function peakCheck(oldPeak, num) {
     var newPeak = oldPeak;
@@ -177,14 +178,13 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
     var currentPeak = dataSubArray.reduce( peakCheck, -200);
     // console.log( start, end );
     // console.log(index, localPeak, peak, mainPeakIndex );
-    const minChange = 10; // Minimum 5dB change
     var peakChange = currentPeak - peak; // Minimum 5dB change
 
     if ( index > 0 ) {
       if ( peakChange > 0 ) {
         peak          = currentPeak;
         mainPeakIndex = index;
-        if ( (currentPeak - lastPeak) > minChange ) {
+        if ( (currentPeak - lastPeak) > changeDbThreshold ) {
           impulse = true;
         }
       }
@@ -194,8 +194,6 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
     }
     lastPeak = currentPeak;
   }
-
-  console.log( debugPeak );
   // Display peak
   document.getElementById('currentVolume').textContent = peak.toFixed(1);
 
@@ -218,10 +216,6 @@ function peakDb(data) {
 
   var mainPeakIndex = 0;
   var peak = -200;
-
-  const startOffset = 20;
-  const endOffset   = 20;
-
 
   for( var index = 0; index < 43; index++) {
     var start = index*FFT_RESULT_LEN+startOffset;
@@ -291,6 +285,9 @@ async function train() {
 
 function thresholdChange() {
    dbThreshold = document.getElementById('thresholdDb').value;
+}
+function changeThresholdChange() {
+   changeDbThreshold = document.getElementById('changeThresholdDb').value;
 }
 
 function epochChange() {
@@ -430,11 +427,11 @@ function draw( dataArray ) {
     // Draw Grid
     canvasCtx.beginPath();
     canvasCtx.lineWidth = 0.2;              // Thin line
-    for (var x = 0; x <= bw; x += 40) {
+    for (var x = 0; x <= bw; x += FFT_RESULT_LEN/10) {
       canvasCtx.moveTo(0.5 + x + p, p);
       canvasCtx.lineTo(0.5 + x + p, bh + p);
     }
-    for (var x = 0; x <= bh; x += FFT_RESULT_LEN/10 ) {
+    for (var x = 0; x <= bh; x +=  10 ) {
       canvasCtx.moveTo(p, 0.5 + x + p);
       canvasCtx.lineTo(bw + p, 0.5 + x + p);
     }
