@@ -49,7 +49,7 @@
       <button id="button2" onclick="collect(2)">Background Noise</button>
       <button id="captureReset" onclick="captureReset()">Capture Reset</button>
     </div>
-    <div class="capture_settings" style="margin-left: 620px;" >
+    <div class="capture_settings" style="margin-left: 200px;" >
       <h2>Settings</h2>
       Threshold: <input id="thresholdDb" type="number" min="-60" max="-20" value="-40" onchange="thresholdChange()"> dB
       <h2>Status</h2>
@@ -59,15 +59,22 @@
       <button id="captureCountValue">0</button>
     </div>
   </div>
-  <div class="train">
-  <h2>Model Training</h2>
-  <button id="train"  onclick="train()">Start</button>
-  Epoch Limit: <input id="epochLimit" type="number" min="10" max="20" value="20" onchange="epochChange()">
-  <button id="epochs">Epochs: 0 of ?</button>
-  <button id="accuracy">Accuracy: 0</button>
-  <button id="saveModel" onclick="saveModel()">Save Model</button>
-  <button id="loadModel" onclick="loadModel()">Load Model</button>
+
+  <div class="train" style="width: 100%; overflow: hidden;">
+    <div class="train_control" style="width: 696px; float: left;">
+      <h2>Model Training</h2>
+      <button id="train"  onclick="train()">Start</button>
+      Epoch Limit: <input id="epochLimit" type="number" min="10" max="20" value="20" onchange="epochChange()">
+      <button id="epochs">Epochs: 0 of ?</button>
+      <button id="accuracy">Accuracy: 0</button>
+    </div>
+    <div class="model" style="margin-left: 200px;">
+      <h2>Model Options</h2>
+      <button id="saveModel" onclick="saveModel()">Save Model</button>
+      <button id="loadModel" onclick="loadModel()">Load Model</button>
+    </div>
   </div>
+
   <div class="test">
   <h2>Test Model</h2>
   <button id="listen" onclick="listen()">Listen</button>
