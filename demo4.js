@@ -71,11 +71,9 @@ function collect(label) {
 
    //console.log("Add value ", addValue, index, threshold );
    if ( addValue == false || dataSubArray == null ) {
-     //console.log("No addition");
      return;
    }
    let vals = normalize(dataSubArray);
-   console.log("Draw");
    draw( dataSubArray );
 
    examples.push({vals, label});
@@ -186,7 +184,6 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
         peak          = currentPeak;
         mainPeakIndex = index;
         if ( (currentPeak - lastPeak) > changeDbThreshold ) {
-          console.log("Curr peak:-", currentPeak, " Last peak:-", lastPeak );
           impulse = true;
           break;
         }
@@ -201,7 +198,6 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
   document.getElementById('currentVolume').textContent = peak.toFixed(1);
 
   if ( peak > threshold && peak < 0 && impulse == true) {
-    //console.log(peak, mainPeakIndex);
     return { "threshold": true, "index": mainPeakIndex };
   }
   else {
@@ -406,8 +402,13 @@ function draw( dataArray ) {
     var canvas    = document.getElementById("myCanvas");
     var canvasCtx = canvas.getContext("2d");
 
+    // Box height
+    var bh = 150;
+    // Padding
+    var p = 0;
+
     canvasCtx.fillStyle = 'rgb(255, 255, 255)';
-    canvasCtx.fillRect(0, 0, 696, 200);
+    canvasCtx.fillRect(0, 0, 696, bh);
     canvasCtx.lineWidth = 2;
     canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
 
@@ -416,10 +417,7 @@ function draw( dataArray ) {
     if ( dataArray != null) {
       bw = dataArray.length;
     }
-    // Box height
-    var bh = 200;
-    // Padding
-    var p = 0;
+
 
     // Draw Grid
     canvasCtx.beginPath();
