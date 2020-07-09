@@ -8,8 +8,6 @@ let epochLimit          =    20;
 var dbThreshold         =   -45;
 var changeDbThreshold   =    30;
 var thresholdPer        =    80; // %
-var peak                =  -200;
-var impulse             = false; // Looking for sudden change in volume
 const startOffset       =    40;
 const endOffset         =    40;
 var   selectModelNum    =     0;
@@ -57,11 +55,11 @@ function collect(label) {
 
    if (label != 2) {
      var result = peakDbThresholdAndPositionCheck( data, dbThreshold  );
-     index         = result['index'];
+     index         = result['index']-1;
      var threshold = result['threshold'];
-     if ( threshold == true && index > 0  && index < 41 ) {
-       var start = (index-1)*FFT_RESULT_LEN;
-       var end   = FFT_RESULT_LEN*(index+2);
+     if ( threshold == true && index >= 0  && index < (43-4) ) {
+       var start = index*FFT_RESULT_LEN;
+       var end   = FFT_RESULT_LEN*(index+3);
        dataSubArray = data.subarray( start, end );
        addValue =true;
      }
@@ -77,6 +75,7 @@ function collect(label) {
      return;
    }
    let vals = normalize(dataSubArray);
+   console.log("Draw");
    draw( dataSubArray );
 
    examples.push({vals, label});
@@ -162,6 +161,8 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
   var debugPeak           =  -200;
   var peak                =  -200;
   var mainPeakIndex       =     0;
+  var impulse             = false; // Looking for sudden change in volume
+
 
   function peakCheck(oldPeak, num) {
     var newPeak = oldPeak;
@@ -185,7 +186,9 @@ function peakDbThresholdAndPositionCheck(data, threshold) {
         peak          = currentPeak;
         mainPeakIndex = index;
         if ( (currentPeak - lastPeak) > changeDbThreshold ) {
+          console.log("Curr peak:-", currentPeak, " Last peak:-", lastPeak );
           impulse = true;
+          break;
         }
       }
     }
@@ -368,12 +371,6 @@ async function displayLabel(labelTensor) {
  } else if ( label == 2 ) {
    document.getElementById("dispButton2").style.color = "red";
  }
-
- //if ( label == 2 ) {
- //   document.getElementById('console').textContent = " ";
- //} else {
- //   document.getElementById('console').textContent = label;
- //}
 }
 
 function listen() {
