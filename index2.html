@@ -39,6 +39,12 @@
       text-align: center;
       padding: 5px;
     }
+    .console {
+      border: 1px outset black;
+      background-color: lightblue;
+      text-align: center;
+      padding: 5px;
+    }
   </style>
 </head>
 <body>
@@ -46,7 +52,7 @@
   <div class="title">
     <h1 align="center">Audio Training Demo</h1>
   </div>
-  <div class="capture" style="width: 100%; overflow: hidden;">
+  <div class="capture" style="overflow: hidden;">
     <div class="capture_window" style="width: 696px; float: left;">
       <h2>Audio Capture</h2>
       <canvas id="myCanvas" width="696" height="200"></canvas>
@@ -67,7 +73,7 @@
     </div>
   </div>
 
-  <div class="train" style="width: 100%; overflow: hidden;">
+  <div class="train" style=" overflow: hidden;">
     <div class="train_control" style="width: 696px; float: left;">
       <h2>Model Training</h2>
       <button id="train"  onclick="train()">Start</button>
@@ -83,7 +89,7 @@
     </div>
   </div>
 
-  <div class="test" style="width: 100%; overflow: hidden;">
+  <div class="test" style="overflow: hidden;">
     <div class="test_control" style="width: 696px; float: left;">
       <h2>Test Model</h2>
       <button id="listen" onclick="listen()">Listen</button>
@@ -100,7 +106,7 @@
       Model: <button id="modelNumButton">None</button>
     </div>
   </div>
-  <div id="console"></div>
+  <div class="console" id="console"></div>
   <script src="demo4.js"></script>
 </body>
 </html>
