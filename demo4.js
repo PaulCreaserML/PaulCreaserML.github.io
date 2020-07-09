@@ -143,12 +143,12 @@ async function loadModel() {
     }
   } catch(e) {
      document.querySelector('#console').textContent =
-         `Model load failed`;
+         'Model ' + selectModelNum + ' load failed';
      return;
   }
 
   document.querySelector('#console').textContent =
-      `Model loaded`;
+      'Model ' + selectModelNum + ' loaded';
   document.getElementById('modelNumButton').textContent = selectModelNum;
   const optimizer = tf.train.adam(0.01);
   model.compile({
